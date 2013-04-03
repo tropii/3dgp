@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebGL Circle Example</title>
+		<script src="../lib/three.js" type="text/javascript"></script>
+		<script src="webgl.js" type="text/javascript"></script>
+
+		<style type="text/css">
+			body {
+				margin: 0;
+				font-family: calibri, sans-serif;
+			}
+			canvas {
+				display: block;
+			}
+			#controls {
+				background: #eee;
+				width: 600px;
+				padding: 20px;
+				float: left;
+			}
+			#rendering-type, #parameters {
+				width: 50%;
+				float: left;
+			}
+		</style>
+
+		<!-- Vertex shader -->
+		<script id="shader-vs" type="x-shader/x-vertex">
+			attribute float aVertexAngle;
+			uniform mat4 uModelView;
+			uniform mat4 uProjection;
+			uniform float uRadius;
+			varying float vAngle;
+
+			vec4 transform(float a) {
+				return vec4(uRadius * cos(radians(a)), uRadius * sin(radians(a)), 0.0, 1.0);
+			}
+
+			void computePointSize(float angle, out float result) {
+				result = 10.0 + angle / 10.0;
+			}
+			
+			void main(void) {
+				/*
+				float size;
+				computePointSize(aVertexAngle, size);
+				gl_PointSize = size;
+				*/
+				gl_PointSize = 3.0;
+
+				vAngle = aVertexAngle;
+
+				gl_Position = uProjection * uModelView * transform(aVertexAngle);
+			}
+		</script>
+
+		<!-- Fragment shader -->
+		<script id="shader-fs" type="x-shader/x-fragment">
+			precision lowp float;
+			varying float vAngle;
+
+			vec4 color(float a) {
+				return vec4(smoothstep(0.0, 360.0, float(gl_FragCoord.x)),
+							smoothstep(0.0, 360.0, float(gl_FragCoord.y)),
+							smoothstep(0.0, 360.0, a),
+							1.0);
+			}
+
+			void main(void) {
+				gl_FragColor = color(vAngle);
+			}
+		</script>
+
+		<!-- Functions for controls -->
+		<script>
+			function changeRenderMode(value) {
+				app.mode = value
+				app.render()
+			}
+
+			function updateRadius(value) {
+				if (value == "")
+					app.radius = 1.0
+				else
+					app.radius = value
+				app.render()
+			}
+
+			function updateNumVertices(value) {
+				if (value < 3)
+					app.numVertices = 3
+				else
+					app.numVertices = value
+				app.initData()
+				app.render()
+			}
+		</script>
+	</head>
+	<body onload="app.start(document.getElementById('canvas1'))">
+		<canvas id="canvas1" width="640" height="480">
+			Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+		</canvas>
+
+		<div id="controls">
+			<div id="rendering-type">
+				<b>Rendering mode</b><br>
+				<input type="radio" name="render-type" id="triangle-fan" value="TRIANGLE_FAN" checked="checked" onclick="changeRenderMode(this.value)">
+				<label for="triangle-fan">Triangle Fan</label><br>
+
+				<input type="radio" name="render-type" id="line-loop" value="LINE_LOOP" onclick="changeRenderMode(this.value)">
+				<label for="line-loop">Line Loop</label><br>
+
+				<input type="radio" name="render-type" id="point" value="POINT"	onclick="changeRenderMode(this.value)">
+				<label for="point">Point</label>
+			</div>
+
+			<div id="parameters">
+				<b>Circle radius</b><br>
+				<input type="text" value="1.0" onkeyup="updateRadius(this.value)"><br><br>
+
+				<b>Number of vertices</b><br>
+				<input type="text" value="10" onkeyup="updateNumVertices(this.value)">
+			</div>
+		</div>
+
+	</body>
+</html>
