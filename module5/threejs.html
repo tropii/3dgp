@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebGL Example</title>
+		<script src="../lib/three.js" type="text/javascript"></script>
+		<script src="threejs.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+
+		<!-- Vertex shader -->
+		<script type="x-shader/x-vertex" id="vertexShader">
+			uniform vec3 u_dirlight_direction;
+
+			varying vec2 v_uv;
+			varying vec3 v_normal;
+			varying vec3 v_dirlight_direction;
+			varying vec4 v_world_position;
+
+			void main() {
+				// Transform vertex normal and directional light direction into eye coordinates
+				v_normal = normalize(normalMatrix * normal);
+				v_dirlight_direction = normalize(normalMatrix * u_dirlight_direction);
+				v_uv = uv;
+				v_world_position = modelMatrix * vec4(position, 1.0);
+				gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+			}
+		</script>
+
+		<!-- Fragment shader -->
+		<script type="x-shader/x-fragment" id="fragmentShader">
+			uniform sampler2D t_reflectance;
+
+			// Ambient light
+			uniform vec4 u_ambient_color;
+
+			// Directional light
+			uniform float u_dirlight_intensity;
+			uniform vec4 u_dirlight_color;
+
+			// Spotlight
+			uniform vec3 u_spotlight_position;
+			uniform vec3 u_spotlight_direction;
+			uniform vec4 u_spotlight_color;
+			uniform float u_spotlight_intensity;
+			uniform float u_spotlight_angle;
+			uniform float u_spotlight_exponent;
+			uniform float u_spotlight_distance;
+
+			varying vec2 v_uv;
+			varying vec3 v_normal;
+			varying vec3 v_dirlight_direction;
+			varying vec4 v_world_position;
+
+			void main() {
+				// Diffuse calculation:
+				// - use dot product to calculate the cosine of the angle
+				//   between vertex normal and light direction
+				// - cut off negative values with max()
+				vec4 diffuse = u_dirlight_color * u_dirlight_intensity *
+							max(dot(v_normal, v_dirlight_direction), 0.0);
+
+				float spotEffect = dot(normalize(u_spotlight_direction),
+							normalize(u_spotlight_position - v_world_position.xyz));
+
+				if (spotEffect > 0.0) {
+					float distance = length(u_spotlight_position - v_world_position.xyz);
+					float attenuation = u_spotlight_intensity * (u_spotlight_distance / distance) / 5.0;
+
+					spotEffect = pow(spotEffect, u_spotlight_exponent) * u_spotlight_angle;
+					diffuse += spotEffect * u_spotlight_color * attenuation;
+				}
+
+				vec4 t_color = texture2D(t_reflectance, v_uv);
+				gl_FragColor = t_color * (diffuse + u_ambient_color);
+
+				//gl_FragColor = t_color * (vec4(diffuse, 1.0) + u_ambient_color);
+			}
+		</script>
+	</head>
+
+	<body onload="initControls(), constructScene()">
+		<div id="wrap">
+			<canvas id="canvas1"></canvas>
+
+			<div class="options">
+				<input type="button" value="Toggle Wireframes" onclick="toggleWireframe()">
+				<input type="button" value="Toggle Ambient Light Color" onclick="toggleAmbientLightColor()">
+				<div id="color"></div>
+			</div>
+		</div>
+	</body>
+</html>
