@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebGL Example</title>
+		<script src="../lib/three.js" type="text/javascript"></script>
+		<script src="threejs.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="font-awesome/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="dropdown-menu-layout.css">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+
+	<body onload="initControls(), constructScene()">
+		<div id="wrap">
+			<canvas id="canvas1"></canvas>
+
+			<div class="dropdown-area">
+				<div class="dropdown-icon"></div>
+				<ul class="dropdown">
+					<li class="extend">Scene Settings
+						<ul>
+							<li><a href="#" onclick="toggleSkySphere()">Toggle Sky Sphere</a></li>
+							<li><a href="#" onclick="toggleFog()">Toggle Fog</a></li>
+							<li><a href="#" onclick="toggleWireframe()">Toggle Wireframes</a></li>
+						</ul>
+					</li>
+					<li class="extend">Tree Settings
+						<ul>
+							<li><a href="#" onclick="toggleTrees()">Toggle Trees</a></li>
+							<li><a href="#" onclick="initTrees()">Reposition Trees</a></li>
+						</ul>
+					</li>
+					<li class="extend">Bonfire Settings
+						<ul>
+							<li><a href="#" onclick="toggleFire()">Toggle Fire</a></li>
+							<li><a href="#" onclick="toggleSmoke()">Toggle Smoke</a></li>
+						</ul>
+					</li>
+					<li class="extend">Light Settings
+						<ul>
+							<li><a href="#" onclick="toggleAmbientLightColor()">Switch Ambient and Fog Color</a></li>
+							<li><a href="#" onclick="togglePointLight()">Toggle Point Light</a></li>
+							<li><a href="#" onclick="toggleSpotLight()">Toggle Spot Light</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</body>
+</html>

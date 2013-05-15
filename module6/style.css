@@ -1,0 +1,133 @@
+body {
+	font-family: arial;
+	margin: 10px;
+}
+
+#wrap {
+	margin: 0;
+	width: 640px;
+	position: relative;
+	overflow: hidden;
+}
+
+.dropdown-area {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 20px;
+	margin: 0;
+}
+
+.dropdown-area:hover .dropdown-icon:before,
+.dropdown-area:hover .dropdown-icon {
+	opacity: 0;
+}
+
+.dropdown-icon {
+	background: rgba(0, 0, 0, 0.2);
+	transition: all 0.8s;
+	text-align: center;
+	opacity: 1;
+	width: 40px;
+	margin: 0 auto;
+	border-radius: 0 0 4px 4px;
+}
+
+.dropdown-icon:after {
+	font-family: 'FontAwesome';
+	font-size: 100%;
+	color: rgba(255, 255, 255, 0.2);
+	content: "\f078";
+	opacity: 1;
+}
+
+/*
+.dropdown-area:after {
+	position: absolute;
+	font-family: 'FontAwesome';
+	font-size: 250%;
+	color: rgba(0, 0, 0, 0.2);
+	content: "\f0c8";
+	z-index: 1;
+}
+*/
+
+.dropdown-area:hover .dropdown {
+	top: 0;
+	visibility: visible;
+}
+
+/* Options background */
+.dropdown {
+	position: absolute;
+	width: 100%;
+	top: -100px;
+	visibility: hidden;
+	background: rgba(0, 0, 0, 0.6);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	transition: all 0.2s;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Homenaje);
+
+/* First level */
+.dropdown,
+.dropdown li,
+.dropdown ul,
+.dropdown ul li {
+	font-family: 'Homenaje', sans-serif;
+	font-size: 100%;
+	letter-spacing: 1px;
+}
+
+.dropdown li {
+	color: #fff;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
+	cursor: default;
+}
+
+.dropdown .extend {
+	padding: 10px 20px;
+}
+
+.dropdown li:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown *.extend:hover ul {
+	opacity: 1;
+}
+
+/* Second level */
+.dropdown ul {
+	background: rgba(0, 0, 0, 0.6);
+	transition: all 0.2s;
+	opacity: 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Spaces don't cause line break */
+.dropdown ul li a {
+	white-space: nowrap;
+	border-width: 0 1px 1px 1px;
+	border-style: solid;
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown a {
+	display: block;
+	padding: 10px 20px;
+	text-decoration: none;
+	color: #fff;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
+}
+
+/*
+span#color {
+	width: 10px;
+	height: 10px;
+	padding: 4px;
+	background: #122037;
+	float: left;
+}*/
